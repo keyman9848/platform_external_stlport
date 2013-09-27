@@ -46,13 +46,20 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := $(libstlport_src_files)
 
+# This is needed to work around the problem that libm.so in NDK does not
+# have the sincos*() functions.
+
+LOCAL_SRC_FILES += src/sincos.c
+
 LOCAL_MODULE := libstlport
 
 LOCAL_CFLAGS := $(libstlport_cflags)
 LOCAL_CPPFLAGS := $(libstlport_cppflags)
 
+ifneq ($(TARGET_ARCH),x86)
 LOCAL_NDK_VERSION := 4
 LOCAL_SDK_VERSION := 8
+endif
 
 include $(LOCAL_PATH)/libstlport.mk
 include $(BUILD_SHARED_LIBRARY)
@@ -67,8 +74,10 @@ LOCAL_MODULE := libstlport_static
 LOCAL_CFLAGS := $(libstlport_cflags)
 LOCAL_CPPFLAGS := $(libstlport_cppflags)
 
+ifneq ($(TARGET_ARCH),x86)
 LOCAL_NDK_VERSION := 4
 LOCAL_SDK_VERSION := 8
+endif
 
 include $(LOCAL_PATH)/libstlport.mk
 include $(BUILD_STATIC_LIBRARY)
